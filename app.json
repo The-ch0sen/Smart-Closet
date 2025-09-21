@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Smart Closet",
+    "slug": "smart-closet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
