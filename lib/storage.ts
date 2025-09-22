@@ -1,28 +1,37 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const KEY = 'smartcloset_items';
+const KEY = 'smart-closet-items';
 
 export type ClothingItem = {
-  id: string;           // uuid
-  name: string;         // 品名
-  category: string;     // 類別：Tee/外套/褲子...
-  color?: string;       // 顏色（可選）
-  createdAt: number;    // 建立時間
+  id: string;
+  name: string;
+  category: string;
+  createdAt: number;
 };
 
 export async function getItems(): Promise<ClothingItem[]> {
   const raw = await AsyncStorage.getItem(KEY);
-  return raw ? JSON.parse(raw) : [];
+  if (!raw) return [];
+  try {
+    const arr: ClothingItem[] = JSON.parse(raw);
+    return Array.isArray(arr) ? arr.sort((a, b) => b.createdAt - a.createdAt) : [];
+  } catch {
+    return [];
+  }
 }
 
-export async function addItem(item: Omit<ClothingItem,'id'|'createdAt'>) {
-  const list = await getItems();
-  const newItem: ClothingItem = {
-    id: `${Date.now()}`,
+export async function addItem(partial: { name: string; category: string }) {
+  const items = await getItems();
+  const item: ClothingItem = {
+    id: Date.now().toString(),
+    name: partial.name,
+    category: partial.category,
     createdAt: Date.now(),
-    ...item,
   };
-  const updated = [newItem, ...list];
-  await AsyncStorage.setItem(KEY, JSON.stringify(updated));
-  return newItem;
+  await AsyncStorage.setItem(KEY, JSON.stringify([item, ...items]));
+}
+
+export async function removeItem(id: string) {
+  const items = await getItems();
+  await AsyncStorage.setItem(KEY, JSON.stringify(items.filter(i => i.id !== id)));
 }

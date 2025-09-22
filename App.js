@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Text, StatusBar } from 'react-native';
+import { StatusBar, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <StatusBar />
-      <Text style={{ fontSize: 18 }}>Hello Smart Closet 👕</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle="dark-content" />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Hello Smart Closet 👕</Text>
+      </View>
+    </SafeAreaView>
   );
 }
